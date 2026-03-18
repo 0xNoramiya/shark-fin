@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ── SIAK-Fin Demo Setup ──
+# ── SHARK-Fin Demo Setup ──
 # One-command setup for PIDI DIGDAYA x Hackathon 2026 demo
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -9,7 +9,7 @@ ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 cd "$ROOT_DIR"
 
 echo "============================================"
-echo "  SIAK-Fin — Demo Setup"
+echo "  SHARK-Fin — Demo Setup"
 echo "  Sistem Intelijen Ancaman Siber Keuangan"
 echo "============================================"
 echo ""
@@ -18,7 +18,7 @@ echo ""
 if [ ! -f .env ]; then
   echo "[1/5] Membuat file .env dari template..."
   cat > .env << 'ENVEOF'
-# SIAK-Fin Demo Configuration
+# SHARK-Fin Demo Configuration (no external API keys needed)
 DATABASE_URL=postgresql+asyncpg://siakfin:siakfin@postgres:5432/siakfin
 REDIS_URL=redis://redis:6379/0
 APP_ENV=development
@@ -68,7 +68,7 @@ docker compose exec -T frontend npm install --silent 2>/dev/null || true
 
 echo ""
 echo "============================================"
-echo "  SIAK-Fin siap!"
+echo "  SHARK-Fin siap!"
 echo ""
 echo "  Dashboard  : http://localhost:5173"
 echo "  API Docs   : http://localhost:8001/docs"

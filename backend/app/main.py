@@ -1,4 +1,4 @@
-"""FastAPI application entry point for SIAK-Fin."""
+"""FastAPI application entry point for SHARK-Fin."""
 
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
@@ -22,8 +22,8 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(
-    title="SIAK-Fin",
-    description="Sistem Intelijen Ancaman Siber Keuangan — Financial Threat Intelligence",
+    title="SHARK-Fin",
+    description="Source Hunting Alert and Risk Knowledge for Financial Intelligence",
     version="0.1.0",
     lifespan=lifespan,
 )
@@ -44,4 +44,4 @@ app.include_router(stats.router, prefix="/api/v1")
 
 @app.get("/health")
 async def health() -> dict:
-    return {"status": "ok", "service": "siak-fin"}
+    return {"status": "ok", "service": "shark-fin"}

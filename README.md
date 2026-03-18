@@ -1,6 +1,6 @@
-# SIAK-Fin
+# SHARK-Fin
 
-**Sistem Intelijen Ancaman Siber Keuangan**
+**Source Hunting Alert and Risk Knowledge for Financial Intelligence**
 
 > Platform intelijen ancaman siber keuangan berbasis OSINT untuk ekosistem keuangan digital Indonesia
 
@@ -16,7 +16,7 @@ Saat ini, tidak ada platform terpusat yang secara proaktif memonitor sumber-sumb
 
 ## Solusi
 
-SIAK-Fin adalah platform intelijen ancaman siber yang secara otomatis:
+SHARK-Fin adalah platform intelijen ancaman siber yang secara otomatis:
 1. **Mengumpulkan** data dari sumber publik (Telegram, Pastebin, GitHub, HIBP)
 2. **Mengklasifikasi** konten menggunakan regex pattern khusus Indonesia (kartu kredit dengan validasi Luhn, NIK dengan validasi tanggal, NPWP dengan checksum)
 3. **Menilai risiko** dengan scoring engine multi-faktor (0-100)
@@ -57,10 +57,10 @@ SIAK-Fin adalah platform intelijen ancaman siber yang secara otomatis:
                v                               v
     +---------------------+         +---------------------+
     |    REST API (FastAPI)|         |  Dashboard (React)  |
-    |  /threats            |<------->|  ThreatFeed         |
-    |  /threats/{id}/report|         |  StatCards          |
-    |  /stats/summary      |         |  SourceChart        |
-    |  /alerts/webhook     |         |  ThreatDetail       |
+    |  /threats            |<------->|  Landing page       |
+    |  /threats/{id}/report|         |  ThreatFeed         |
+    |  /stats/summary      |         |  StatCards          |
+    |  /alerts/webhook     |         |  SourceChart        |
     +---------------------+         +---------------------+
                |
                v
@@ -74,7 +74,7 @@ SIAK-Fin adalah platform intelijen ancaman siber yang secara otomatis:
 
 ```bash
 # Clone dan jalankan
-git clone <repo-url> && cd siak-fin
+git clone <repo-url> && cd shark-fin
 
 # One-command demo setup
 chmod +x scripts/demo_setup.sh
@@ -87,7 +87,8 @@ docker compose exec backend python -m scripts.seed_demo
 ```
 
 Akses:
-- **Dashboard**: http://localhost:5173
+- **Landing Page**: http://localhost:5173
+- **Dashboard**: http://localhost:5173/dashboard
 - **API Docs**: http://localhost:8001/docs
 - **Health Check**: http://localhost:8001/health
 
@@ -97,6 +98,7 @@ Akses:
 - **Deteksi Data Keuangan Indonesia** — Pattern matching khusus untuk kartu kredit (BIN Indonesia + Luhn), NIK (validasi tanggal+provinsi), NPWP (checksum), nomor rekening, kredensial
 - **Risk Scoring Engine** — Skor 0-100 dengan multiplier volume, freshness, dan kredibilitas sumber
 - **Dashboard Analis** — Interface Bahasa Indonesia dengan filter severity/sumber/status, detail ancaman, dan entity breakdown
+- **Landing Page** — Public-facing page dengan ocean theme untuk presentasi ke stakeholder
 - **Laporan OJK Otomatis** — Generate laporan insiden format regulasi dengan rekomendasi tindakan per jenis data
 - **Status Workflow** — Alur kerja analis: Baru → Terverifikasi → Dimitigasi / Positif Palsu
 - **Export Insiden** — Download laporan per ancaman sebagai file .txt
@@ -105,7 +107,7 @@ Akses:
 
 ## Alignment: PIDI PS1 — Cyber Security & Data Protection
 
-| Kriteria PIDI | Implementasi SIAK-Fin |
+| Kriteria PIDI | Implementasi SHARK-Fin |
 |---|---|
 | Deteksi ancaman siber | Real-time monitoring 4 sumber OSINT |
 | Perlindungan data keuangan | Pattern detection khusus instrumen keuangan Indonesia |
@@ -122,7 +124,7 @@ Akses:
 | Cache | Redis 7 | Queue dan caching |
 | Collectors | Telethon, httpx, PyGithub | Pengumpulan data OSINT |
 | Classifier | Regex + validasi (Luhn, NIK date, NPWP checksum) | Deteksi data keuangan |
-| Frontend | React 18 + Vite + TailwindCSS | Dashboard analis |
+| Frontend | React 18 + Vite + TailwindCSS | Landing page + dashboard analis |
 | Visualisasi | Recharts | Grafik dan statistik |
 | Container | Docker + Docker Compose | Deployment |
 
@@ -140,7 +142,7 @@ Akses:
 
 ## Catatan Legal & Etika
 
-SIAK-Fin **hanya** memonitor sumber-sumber yang dapat diakses secara publik (publicly accessible sources). Platform ini:
+SHARK-Fin **hanya** memonitor sumber-sumber yang dapat diakses secara publik (publicly accessible sources). Platform ini:
 
 - **Tidak** melakukan akses tidak sah ke sistem manapun
 - **Tidak** menyimpan data asli (semua nilai sensitif di-mask)
@@ -150,4 +152,4 @@ SIAK-Fin **hanya** memonitor sumber-sumber yang dapat diakses secara publik (pub
 
 ---
 
-*SIAK-Fin — Melindungi ekosistem keuangan digital Indonesia melalui intelijen ancaman siber proaktif.*
+*SHARK-Fin — Melindungi ekosistem keuangan digital Indonesia melalui intelijen ancaman siber proaktif.*

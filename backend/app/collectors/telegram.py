@@ -58,7 +58,7 @@ class TelegramCollector(BaseCollector):
                     "TELEGRAM_API_ID and TELEGRAM_API_HASH must be set"
                 )
             self._client = TelegramClient(
-                "siak_fin_bot", api_id, api_hash
+                "shark_fin_bot", api_id, api_hash
             )
             await self._client.start()
             logger.info("Telethon client connected")

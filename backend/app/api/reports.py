@@ -188,7 +188,7 @@ async def generate_report(
 
     entities = threat.detected_entities.get("entities", [])
     tags = threat.institution_tags or []
-    nomor = f"SIAK-{str(threat.id)[:8].upper()}"
+    nomor = f"SHARK-{str(threat.id)[:8].upper()}"
 
     report = f"""\
 LAPORAN INSIDEN KEAMANAN SIBER
@@ -218,8 +218,8 @@ REKOMENDASI TINDAKAN
 {_build_rekomendasi(entities)}
 
 ================================
-Laporan ini dibuat secara otomatis oleh SIAK-Fin
-(Sistem Intelijen Ancaman Siber Keuangan).
-Untuk informasi lebih lanjut hubungi tim SIAK-Fin.
+Laporan ini dibuat secara otomatis oleh SHARK-Fin
+(Source Hunting Alert and Risk Knowledge for Financial Intelligence).
+Untuk informasi lebih lanjut hubungi tim SHARK-Fin.
 """
     return report

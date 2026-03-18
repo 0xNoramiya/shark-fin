@@ -50,7 +50,7 @@ class PasteSiteCollector(BaseCollector):
         """Fetch recent public pastes and yield those with financial data."""
         async with httpx.AsyncClient(
             timeout=30.0,
-            headers={"User-Agent": "SIAK-Fin/0.1 (threat-intel)"},
+            headers={"User-Agent": "SHARK-Fin/0.1 (threat-intel)"},
         ) as client:
             paste_list = await self._fetch_paste_list(client)
             for paste_meta in paste_list:
