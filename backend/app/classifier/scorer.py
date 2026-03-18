@@ -50,6 +50,7 @@ SOURCE_CREDIBILITY: dict[str, float] = {
     "paste":         1.0,
     "github":        0.8,
     "hibp":          1.1,
+    "google_dork":   0.9,
 }
 
 

@@ -340,8 +340,8 @@ MEDIUM_THREATS = [
         "hours_ago": 55,
     },
     {
-        "source_type": SourceType.HIBP,
-        "source_url": "https://haveibeenpwned.com/breach/ShopeePay2026",
+        "source_type": SourceType.GOOGLE_DORK,
+        "source_url": "https://www.google.com/search?q=shopeepay+breach+2026",
         "raw_content": (
             "Breach: ShopeePay2026\n"
             "Date: 2026-02-28\n"
@@ -458,8 +458,8 @@ LOW_THREATS = [
         "hours_ago": 200,
     },
     {
-        "source_type": SourceType.HIBP,
-        "source_url": "https://haveibeenpwned.com/breach/OldBukopinLeak",
+        "source_type": SourceType.GOOGLE_DORK,
+        "source_url": "https://www.google.com/search?q=bukopin+data+leak+2023",
         "raw_content": (
             "Breach: OldBukopinLeak (originally from 2023)\n"
             "Re-indexed by HIBP. 1.200 email+password combos.\n"
@@ -495,11 +495,13 @@ async def seed() -> None:
             content = d["raw_content"]
             h = hashlib.sha256(content.encode()).hexdigest()
 
+            from app.models.threat import mask_sensitive
             threat = Threat(
                 id=uuid.uuid4(),
                 source_type=d["source_type"],
                 source_url=d["source_url"],
                 raw_content=content,
+                content_preview=mask_sensitive(content),
                 detected_entities={
                     "entities": d["entities"],
                     "count": len(d["entities"]),

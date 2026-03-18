@@ -16,7 +16,12 @@ from app.classifier.dedup import content_hash
 from app.database import Base, get_session
 from app.models.threat import Severity, SourceType, Threat, ThreatStatus
 
-TEST_DB_URL = "postgresql+asyncpg://siakfin:siakfin@postgres:5432/siakfin"
+import os
+
+TEST_DB_URL = os.getenv(
+    "TEST_DATABASE_URL",
+    "postgresql+asyncpg://siakfin:siakfin@postgres:5432/siakfin",
+)
 
 
 @pytest_asyncio.fixture(scope="function")

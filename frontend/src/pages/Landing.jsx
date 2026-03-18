@@ -147,7 +147,7 @@ export default function Landing({ theme, toggleTheme }) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
-            { icon: <DetectionIcon />, title: 'Deteksi < 1 jam', desc: 'Crawler 24/7 pada Telegram, paste site, GitHub, dan HIBP. Alert dikirim ke dashboard dan webhook sebelum data dieksploitasi.' },
+            { icon: <DetectionIcon />, title: 'Deteksi < 1 jam', desc: 'Crawler 24/7 pada Telegram, paste site, GitHub, dan Google Dork. Alert dikirim ke dashboard dan webhook sebelum data dieksploitasi.' },
             { icon: <ClassifierIcon />, title: 'Classifier NIK, NPWP, BIN bank', desc: 'Validasi NIK dengan tanggal lahir dan kode provinsi. Checksum NPWP. 10 tabel BIN bank nasional. Tidak ada solusi lain yang punya ini.' },
             { icon: <ReportIcon />, title: 'Draft notifikasi mengacu SEOJK 29/2022', desc: 'Draft notifikasi awal mengacu elemen wajib Bab IX SEOJK 29/SEOJK.03/2022. Membantu bank memenuhi kewajiban notifikasi 24 jam ke OJK setelah insiden dikonfirmasi.' },
             { icon: <WebhookIcon />, title: 'Webhook API real-time', desc: 'Integrasi langsung ke SIEM atau SOC lembaga. 92 automated tests. One-command deployment via Docker.' },

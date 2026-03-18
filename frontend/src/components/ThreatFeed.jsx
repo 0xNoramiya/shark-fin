@@ -9,7 +9,7 @@ const SEV_VAR = {
   MEDIUM: { bg: '--sev-sedang-bg', color: '--sev-sedang-text', border: '--sev-sedang-bdr', left: '--sev-sedang-bar', score: '--sev-sedang-text' },
   LOW: { bg: '--sev-rendah-bg', color: '--sev-rendah-text', border: '--sev-rendah-bdr', left: '--sev-rendah-bar', score: '--sev-rendah-text' },
 }
-const SRC_LABEL = { TELEGRAM: 'Telegram', PASTE: 'Paste', GITHUB: 'GitHub', HIBP: 'HIBP' }
+const SRC_LABEL = { TELEGRAM: 'Telegram', PASTE: 'Paste', GITHUB: 'GitHub', HIBP: 'HIBP', GOOGLE_DORK: 'Google Dork' }
 
 function timeAgo(iso) {
   const diff = Date.now() - new Date(iso).getTime(), m = Math.floor(diff / 60000)
@@ -54,7 +54,7 @@ export default function ThreatFeed({ onSelect }) {
             style={{ backgroundColor: 'var(--bg-input)', border: '1px solid var(--border-input)', color: 'var(--text-secondary)', outline: 'none' }} />
           {[
             { key: 'severity', opts: [['', 'Semua Severity'], ['CRITICAL', 'Kritis'], ['HIGH', 'Tinggi'], ['MEDIUM', 'Sedang'], ['LOW', 'Rendah']] },
-            { key: 'source_type', opts: [['', 'Semua Sumber'], ['TELEGRAM', 'Telegram'], ['PASTE', 'Paste'], ['GITHUB', 'GitHub'], ['HIBP', 'HIBP']] },
+            { key: 'source_type', opts: [['', 'Semua Sumber'], ['TELEGRAM', 'Telegram'], ['PASTE', 'Paste'], ['GITHUB', 'GitHub'], ['GOOGLE_DORK', 'Google Dork']] },
             { key: 'status', opts: [['', 'Semua Status'], ['NEW', 'Baru'], ['VERIFIED', 'Terverifikasi'], ['MITIGATED', 'Dimitigasi'], ['FALSE_POSITIVE', 'Positif Palsu']] },
           ].map(f => (
             <select key={f.key} value={filters[f.key] || ''} onChange={e => setFilters(prev => ({ ...prev, [f.key]: e.target.value || undefined }))}

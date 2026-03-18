@@ -10,7 +10,7 @@ const SEV_VAR = {
   LOW: { bg: '--sev-rendah-bg', color: '--sev-rendah-text', border: '--sev-rendah-bdr' },
 }
 const STATUS_LABEL = { NEW: 'Baru', VERIFIED: 'Terverifikasi', MITIGATED: 'Dimitigasi', FALSE_POSITIVE: 'Positif Palsu' }
-const SRC_LABEL = { TELEGRAM: 'Telegram', PASTE: 'Paste Site', GITHUB: 'GitHub', HIBP: 'HIBP' }
+const SRC_LABEL = { TELEGRAM: 'Telegram', PASTE: 'Paste Site', GITHUB: 'GitHub', HIBP: 'HIBP', GOOGLE_DORK: 'Google Dork' }
 const ENTITY_LABEL = { CREDIT_CARD: 'Kartu Kredit', NIK: 'NIK', NPWP: 'NPWP', CREDENTIAL: 'Kredensial', ACCOUNT_NUMBER: 'No. Rekening', CVV: 'CVV', BANK_NAME: 'Nama Bank', BANKING_KEYWORD: 'Keyword' }
 const ENTITY_PLAIN = { CREDIT_CARD: 'nomor kartu kredit', NIK: 'Nomor Induk Kependudukan (NIK)', NPWP: 'Nomor Pokok Wajib Pajak (NPWP)', CREDENTIAL: 'kredensial akses', ACCOUNT_NUMBER: 'nomor rekening bank', CVV: 'kode keamanan kartu' }
 const REKOMENDASI = {
@@ -48,7 +48,7 @@ function generateIntelReport(t) {
   const entities=t.detected_entities?.entities||[], tags=(t.institution_tags||[]).join(', ')||'-', counts={}
   entities.forEach(e=>{counts[e.type]=(counts[e.type]||0)+1}); const reks=[],seen=new Set()
   entities.forEach(e=>{if(REKOMENDASI[e.type]&&!seen.has(e.type)){seen.add(e.type);reks.push(REKOMENDASI[e.type])}})
-  return ['LAPORAN INTELIJEN INTERNAL \u2014 SHARK-Fin','='.repeat(42),`Nomor          : INTEL-SHARK-${(t.id||'').slice(0,8).toUpperCase()}`,`Tanggal        : ${formatDateWib(t.created_at)}`,`Tingkat        : ${SEV_LABEL[t.severity]||t.severity}`,`Status         : ${STATUS_LABEL[t.status]||t.status}`,`Skor Risiko    : ${t.risk_score}/100`,`Sumber         : ${SRC_LABEL[t.source_type]||t.source_type}`,`URL            : ${t.source_url||'-'}`,`Lembaga Terkait: ${tags}`,'',`ENTITAS TERDETEKSI (${entities.length})`,'-'.repeat(36),...entities.map((e,i)=>`   ${i+1}. [${ENTITY_LABEL[e.type]||e.type}] ${e.value} (confidence: ${(e.confidence*100).toFixed(0)}%)`),'','DISTRIBUSI TIPE','-'.repeat(15),...Object.entries(counts).sort().map(([t,c])=>`   ${ENTITY_LABEL[t]||t}: ${c}`),'','REKOMENDASI TEKNIS','-'.repeat(18),...reks.slice(0,6).map((r,i)=>`   ${i+1}. ${r}`),'','CUPLIKAN KONTEN','-'.repeat(15),(t.raw_content||t.raw_text_preview||'-').slice(0,500),'','='.repeat(42),'Dokumen internal SHARK-Fin. Tidak untuk distribusi eksternal.'].join('\n')
+  return ['LAPORAN INTELIJEN INTERNAL \u2014 SHARK-Fin','='.repeat(42),`Nomor          : INTEL-SHARK-${(t.id||'').slice(0,8).toUpperCase()}`,`Tanggal        : ${formatDateWib(t.created_at)}`,`Tingkat        : ${SEV_LABEL[t.severity]||t.severity}`,`Status         : ${STATUS_LABEL[t.status]||t.status}`,`Skor Risiko    : ${t.risk_score}/100`,`Sumber         : ${SRC_LABEL[t.source_type]||t.source_type}`,`URL            : ${t.source_url||'-'}`,`Lembaga Terkait: ${tags}`,'',`ENTITAS TERDETEKSI (${entities.length})`,'-'.repeat(36),...entities.map((e,i)=>`   ${i+1}. [${ENTITY_LABEL[e.type]||e.type}] ${e.value} (confidence: ${(e.confidence*100).toFixed(0)}%)`),'','DISTRIBUSI TIPE','-'.repeat(15),...Object.entries(counts).sort().map(([t,c])=>`   ${ENTITY_LABEL[t]||t}: ${c}`),'','REKOMENDASI TEKNIS','-'.repeat(18),...reks.slice(0,6).map((r,i)=>`   ${i+1}. ${r}`),'','INDIKATOR TEKNIS','-'.repeat(16),`   Hash konten     : ${t.content_hash||'-'}`,`   Preview tersamar: ${(t.content_preview||t.raw_content||'-').slice(0,200)}`,'','   CATATAN: Konten asli tidak disimpan sesuai prinsip minimisasi','   data (UU PDP Pasal 16).','','='.repeat(42),'Dokumen internal SHARK-Fin. Tidak untuk distribusi eksternal.'].join('\n')
 }
 function buildRiskFactors(t) {
   const f=[], entities=t.detected_entities?.entities||[], types=sensitiveTypes(entities)
@@ -64,7 +64,7 @@ function buildRiskFactors(t) {
 export default function ThreatDetail({ threat: t, onClose }) {
   const [status,setStatus]=useState(t.status),[exportingOjk,setExportingOjk]=useState(false),[exportingIntel,setExportingIntel]=useState(false),[showTooltip,setShowTooltip]=useState(false)
   const mutation=useUpdateStatus(), entities=t.detected_entities?.entities||[], sv=SEV_VAR[t.severity]||SEV_VAR.LOW, isDemo=t._isDemo
-  const rawPreview=t.raw_content||t.raw_text_preview||'', factors=buildRiskFactors(t), entityTypes=sensitiveTypes(entities).filter(k=>REKOMENDASI[k])
+  const rawPreview=t.content_preview||t.raw_content||t.raw_text_preview||'', factors=buildRiskFactors(t), entityTypes=sensitiveTypes(entities).filter(k=>REKOMENDASI[k])
 
   function handleStatusChange(v){setStatus(v);if(!isDemo)mutation.mutate({id:t.id,status:v})}
   async function handleExportOjk(){setExportingOjk(true);try{if(isDemo){dl(generateNotifikasiOJK(t),`DRAFT-NOTIFIKASI-OJK-${(t.id||'').slice(0,8)}`)}else{const r=await client.get(`/threats/${t.id}/report?format=ojk`);dl(r.data,`DRAFT-NOTIFIKASI-OJK-${(t.id||'').slice(0,8)}`)}}catch{}setExportingOjk(false)}
@@ -131,9 +131,10 @@ export default function ThreatDetail({ threat: t, onClose }) {
               </table>
             </div>
           </section>
-          {rawPreview&&<section><SL>Cuplikan Konten Asli</SL>
+          {rawPreview&&<section><SL>Cuplikan Konten (Tersamar)</SL>
             <div className="rounded-lg p-3 font-mono text-[11px] leading-relaxed overflow-hidden"
               style={{backgroundColor:'var(--bg-input)',border:'1px solid var(--border-subtle)',color:'var(--text-muted)',maxHeight:'4.5em',WebkitLineClamp:3,display:'-webkit-box',WebkitBoxOrient:'vertical'}}>{rawPreview}</div>
+            <p className="text-[10px] mt-1" style={{color:'var(--text-faint)'}}>Konten ditampilkan dalam bentuk tersamar sesuai UU PDP.</p>
           </section>}
           <section><SL>Faktor Risiko</SL><div className="flex flex-wrap gap-2">
             {factors.map(f=><span key={f.label} className="text-[10px] px-2 py-1 rounded-md" style={{backgroundColor:f.color,color:f.text,border:`1px solid ${f.color}`}}>{f.label}</span>)}

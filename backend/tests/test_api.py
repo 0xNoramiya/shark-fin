@@ -85,7 +85,7 @@ class TestGetThreat:
         data = resp.json()
         assert data["id"] == str(sample_threat.id)
         assert "detected_entities" in data
-        assert "raw_content" in data
+        assert "content_preview" in data
 
     @pytest.mark.asyncio
     async def test_not_found(self, client: AsyncClient):
@@ -102,9 +102,18 @@ class TestUpdateStatus:
         resp = await client.patch(
             f"/api/v1/threats/{sample_threat.id}/status",
             json={"status": "VERIFIED"},
+            headers={"X-API-Key": "sharkfin-demo-key-2026"},
         )
         assert resp.status_code == 200
         assert resp.json()["status"] == "VERIFIED"
+
+    @pytest.mark.asyncio
+    async def test_update_unauthorized(self, client: AsyncClient, sample_threat: Threat):
+        resp = await client.patch(
+            f"/api/v1/threats/{sample_threat.id}/status",
+            json={"status": "VERIFIED"},
+        )
+        assert resp.status_code == 401
 
     @pytest.mark.asyncio
     async def test_update_not_found(self, client: AsyncClient):
@@ -112,6 +121,7 @@ class TestUpdateStatus:
         resp = await client.patch(
             f"/api/v1/threats/{fake_id}/status",
             json={"status": "VERIFIED"},
+            headers={"X-API-Key": "sharkfin-demo-key-2026"},
         )
         assert resp.status_code == 404
 
@@ -147,7 +157,7 @@ class TestResponseShape:
         resp = await client.get("/api/v1/threats")
         item = resp.json()["items"][0]
         required_fields = [
-            "id", "source_type", "source_url", "raw_content",
+            "id", "source_type", "source_url", "content_preview",
             "detected_entities", "content_hash", "risk_score",
             "severity", "status", "institution_tags",
             "created_at", "updated_at",

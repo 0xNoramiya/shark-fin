@@ -6,11 +6,12 @@ import uuid
 from datetime import timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from app.middleware.auth import require_api_key
 from fastapi.responses import PlainTextResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_session
-from app.models.threat import Threat
+from app.models.threat import Threat, mask_sensitive
 
 router = APIRouter(prefix="/threats", tags=["reports"])
 
@@ -33,6 +34,7 @@ _SRC_ID = {
     "PASTE": "Paste site (Pastebin/Rentry)",
     "GITHUB": "Repositori GitHub publik",
     "HIBP": "HaveIBeenPwned",
+    "GOOGLE_DORK": "Google Custom Search (dork)",
 }
 
 _BULAN = [
@@ -169,7 +171,11 @@ def _build_rekomendasi(entities: list[dict]) -> str:
 
 # ── Endpoint: Draft Notifikasi OJK (SEOJK 29/2022 Bab IX) ──
 
-@router.get("/{threat_id}/report", response_class=PlainTextResponse)
+@router.get(
+    "/{threat_id}/report",
+    response_class=PlainTextResponse,
+    dependencies=[Depends(require_api_key)],
+)
 async def generate_notifikasi_ojk(
     threat_id: uuid.UUID,
     format: str = Query(default="ojk"),
@@ -297,9 +303,14 @@ REKOMENDASI TEKNIS
 ------------------
 {rek_lines}
 
-CUPLIKAN KONTEN
----------------
-{(threat.raw_content or '-')[:500]}
+INDIKATOR TEKNIS
+----------------
+   Hash konten     : {threat.content_hash}
+   Preview tersamar: {threat.content_preview or mask_sensitive(threat.raw_content or '')[:200]}
+
+   CATATAN: Konten asli tidak disimpan sesuai prinsip minimisasi
+   data (UU PDP Pasal 16). Hash SHA-256 dapat digunakan untuk
+   verifikasi tanpa mengekspos data sensitif.
 
 ==========================================
 Dokumen internal SHARK-Fin. Tidak untuk distribusi eksternal.

@@ -55,7 +55,7 @@ function ScanIndicator() {
           <div className="absolute right-0 top-8 z-50 w-56 rounded-xl p-3 space-y-2"
             style={{ backgroundColor: 'var(--bg-header)', border: '1px solid var(--border-input)' }}>
             {[{ name: 'Telegram', time: '2 menit lalu' }, { name: 'Paste Site', time: '8 menit lalu' },
-              { name: 'GitHub', time: '12 menit lalu' }, { name: 'HIBP', time: '31 menit lalu' }].map(s => (
+              { name: 'GitHub', time: '12 menit lalu' }, { name: 'Google Dork', time: '52 menit lalu' }].map(s => (
               <div key={s.name} className="flex items-center justify-between text-xs">
                 <span style={{ color: 'var(--text-secondary)' }}><span style={{ color: 'var(--scan-dot)' }}>&#10003;</span> {s.name}</span>
                 <span style={{ color: 'var(--text-faint)' }}>{s.time}</span>

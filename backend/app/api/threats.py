@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from app.middleware.auth import require_api_key
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -26,7 +27,7 @@ class ThreatResponse(BaseModel):
     id: uuid.UUID
     source_type: SourceType
     source_url: Optional[str] = None
-    raw_content: str
+    content_preview: Optional[str] = None
     detected_entities: dict
     content_hash: str
     risk_score: int
@@ -133,7 +134,11 @@ async def get_threat(
     return threat
 
 
-@router.patch("/{threat_id}/status", response_model=StatusUpdateResponse)
+@router.patch(
+    "/{threat_id}/status",
+    response_model=StatusUpdateResponse,
+    dependencies=[Depends(require_api_key)],
+)
 async def update_threat_status(
     threat_id: uuid.UUID,
     body: StatusUpdate,

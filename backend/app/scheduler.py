@@ -28,6 +28,7 @@ _SOURCE_MAP: dict[str, SourceType] = {
     "PASTE": SourceType.PASTE,
     "GITHUB": SourceType.GITHUB,
     "HIBP": SourceType.HIBP,
+    "GOOGLE_DORK": SourceType.GOOGLE_DORK,
 }
 
 
@@ -78,10 +79,14 @@ async def _process_intel(
             "CRITICAL": ModelSeverity.CRITICAL,
         }
 
+        from app.models.threat import mask_sensitive
+        preview = mask_sensitive(content)
+
         threat = Threat(
             source_type=_SOURCE_MAP.get(source_type_str, SourceType.PASTE),
             source_url=source_url,
             raw_content=content,
+            content_preview=preview,
             detected_entities={
                 "entities": [e.to_dict() for e in entities],
                 "count": len(entities),
@@ -137,16 +142,65 @@ async def run_paste_collector() -> None:
         logger.exception("Paste site collector failed")
 
 
+async def run_github_collector() -> None:
+    """Execute the GitHub collector pipeline."""
+    from app.collectors.github import GitHubCollector
+
+    collector = GitHubCollector()
+    try:
+        async for intel in collector.collect():
+            await _process_intel(
+                intel.source_type,
+                intel.source_url,
+                intel.content,
+                intel.posted_at,
+                intel.metadata,
+            )
+    except Exception:
+        logger.exception("GitHub collector failed")
+
+
+async def run_google_dork_collector() -> None:
+    """Execute the Google Dork collector pipeline."""
+    from app.collectors.google_dork import GoogleDorkCollector
+
+    collector = GoogleDorkCollector()
+    try:
+        async for intel in collector.collect():
+            await _process_intel(
+                intel.source_type,
+                intel.source_url,
+                intel.content,
+                intel.posted_at,
+                intel.metadata,
+            )
+    except Exception:
+        logger.exception("Google Dork collector failed")
+
+
 def start_scheduler() -> None:
     """Register jobs and start the scheduler."""
+    from app.config import settings
+
     scheduler.add_job(
         run_telegram_collector, "interval", minutes=5, id="telegram_collect",
     )
     scheduler.add_job(
         run_paste_collector, "interval", minutes=15, id="paste_collect",
     )
+    scheduler.add_job(
+        run_github_collector, "interval",
+        seconds=settings.GITHUB_POLL_INTERVAL, id="github_collect",
+    )
+    scheduler.add_job(
+        run_google_dork_collector, "interval",
+        seconds=settings.GOOGLE_DORK_INTERVAL, id="google_dork_collect",
+    )
     scheduler.start()
-    logger.info("Scheduler started with telegram (5m) and paste (15m) jobs")
+    logger.info(
+        "Scheduler started: telegram (5m), paste (15m), github (%ds), google_dork (%ds)",
+        settings.GITHUB_POLL_INTERVAL, settings.GOOGLE_DORK_INTERVAL,
+    )
 
 
 def stop_scheduler() -> None:

@@ -2,9 +2,9 @@ import { useMemo } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts'
 import { useStats } from '../hooks/useStats'
 
-const SOURCE_LABELS = { TELEGRAM: 'Telegram', PASTE: 'Paste Site', GITHUB: 'GitHub', HIBP: 'HIBP' }
-const SRC_KEYS = ['TELEGRAM', 'PASTE', 'GITHUB', 'HIBP']
-const SRC_VARS = ['--src-telegram', '--src-paste', '--src-github', '--src-hibp']
+const SOURCE_LABELS = { TELEGRAM: 'Telegram', PASTE: 'Paste Site', GITHUB: 'GitHub', GOOGLE_DORK: 'Google Dork' }
+const SRC_KEYS = ['TELEGRAM', 'PASTE', 'GITHUB', 'GOOGLE_DORK']
+const SRC_VARS = ['--src-telegram', '--src-paste', '--src-github', '--src-google-dork']
 
 function getVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim()

@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import alerts, reports, stats, threats
+from app.models import webhook  # noqa: F401 — register table
 from app.config import settings
 from app.database import init_db
 from app.scheduler import start_scheduler, stop_scheduler

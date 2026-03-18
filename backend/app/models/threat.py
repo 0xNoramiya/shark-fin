@@ -18,6 +18,23 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
+import re
+
+
+def mask_sensitive(text: str) -> str:
+    """Mask PII/financial data in text for safe storage and display."""
+    # Credit card: keep first 4 + last 4
+    text = re.sub(r'\b(\d{4})\d{8,12}(\d{4})\b', r'\1 •••• •••• \2', text)
+    # NIK: keep first 6 + last 2
+    text = re.sub(r'\b(\d{6})\d{8}(\d{2})\b', r'\1••••••••\2', text)
+    # Passwords
+    text = re.sub(
+        r'(password|passwd|pwd|pin|secret)\s*[:=]\s*\S+',
+        r'\1: [TERSEMBUNYI]', text, flags=re.IGNORECASE
+    )
+    # Truncate
+    return text[:200] + ('...' if len(text) > 200 else '')
+
 
 # ── Enums ──
 
@@ -28,6 +45,7 @@ class SourceType(str, enum.Enum):
     PASTE = "PASTE"
     GITHUB = "GITHUB"
     HIBP = "HIBP"
+    GOOGLE_DORK = "GOOGLE_DORK"
 
 
 class Severity(str, enum.Enum):
@@ -91,6 +109,10 @@ class Threat(Base):
 
     # Payload
     raw_content: Mapped[str] = mapped_column(Text, nullable=False)
+    content_preview: Mapped[str | None] = mapped_column(
+        Text, nullable=True,
+        comment="First 200 chars of content with PII masked",
+    )
     detected_entities: Mapped[dict] = mapped_column(JSONB, default=dict)
     content_hash: Mapped[str] = mapped_column(
         String(64), unique=True, nullable=False, index=True,

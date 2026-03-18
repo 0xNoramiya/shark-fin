@@ -47,9 +47,18 @@ class Settings(BaseSettings):
 
     # ── GitHub ──
     GITHUB_TOKEN: str = ""
+    GITHUB_POLL_INTERVAL: int = 1800  # 30 minutes
+
+    # ── Google Dork (Custom Search) ──
+    GOOGLE_CSE_API_KEY: str = ""
+    GOOGLE_CSE_ID: str = ""
+    GOOGLE_DORK_INTERVAL: int = 3600  # 1 hour
 
     # ── HaveIBeenPwned ──
     HIBP_API_KEY: str = ""
+
+    # ── Auth ──
+    API_KEYS: str = "sharkfin-demo-key-2026"
 
     # ── App ──
     APP_ENV: str = "development"
