@@ -8,6 +8,14 @@ PIDI DIGDAYA x Hackathon 2026 | PS1: Cyber Security & Data Protection
 
 ---
 
+### Landing Page
+![Landing Page](docs/screenshots/landing.png)
+
+### Dashboard Analis
+![Dashboard](docs/screenshots/dashboard.png)
+
+---
+
 ## Masalah
 
 Menurut data BSSN, Indonesia mengalami lebih dari 400 juta anomali trafik siber pada tahun 2023, dengan sektor keuangan menjadi target utama. OJK mencatat peningkatan 53% kasus kebocoran data nasabah di industri perbankan dan fintech sepanjang 2024-2025. Data kartu kredit, NIK, NPWP, dan kredensial internet banking Indonesia secara rutin diperjualbelikan di kanal Telegram, paste site, dan dark web — seringkali terdeteksi oleh pelaku kejahatan lebih cepat daripada oleh lembaga keuangan itu sendiri.
