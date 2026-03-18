@@ -1,10 +1,10 @@
-# SHARK-Fin
+<p align="center">
+  <img src="docs/banner.svg" alt="SHARK-Fin Banner" width="100%">
+</p>
 
-**Source Hunting Alert and Risk Knowledge for Financial Intelligence**
-
-> Platform intelijen ancaman siber keuangan berbasis OSINT untuk ekosistem keuangan digital Indonesia
-
-PIDI DIGDAYA x Hackathon 2026 | PS1: Cyber Security & Data Protection
+<p align="center">
+  <strong>Platform intelijen ancaman siber keuangan berbasis OSINT untuk ekosistem keuangan digital Indonesia</strong>
+</p>
 
 ---
 
