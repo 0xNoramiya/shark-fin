@@ -32,7 +32,7 @@ jobs:
 
       - name: Build
         working-directory: frontend
-        run: npm run build
+        run: VITE_BASE_URL=/shark-fin/ npm run build
 
       - name: Copy 404.html for SPA routing
         run: cp frontend/dist/index.html frontend/dist/404.html

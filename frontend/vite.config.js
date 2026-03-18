@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/shark-fin/',
+  base: process.env.VITE_BASE_URL || '/',
   server: {
     host: '0.0.0.0',
     port: 5173,
