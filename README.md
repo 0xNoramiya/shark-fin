@@ -9,10 +9,10 @@ PIDI DIGDAYA x Hackathon 2026 | PS1: Cyber Security & Data Protection
 ---
 
 ### Landing Page
-![Landing Page](docs/screenshots/landing.png)
+![Landing Page](docs/screenshots/landing.png?v=2)
 
 ### Dashboard Analis
-![Dashboard](docs/screenshots/dashboard.png)
+![Dashboard](docs/screenshots/dashboard.png?v=2)
 
 ---
 
