@@ -330,8 +330,8 @@ export default function Landing() {
             },
             {
               icon: <ReportIcon />,
-              title: 'Draft laporan mengacu SEOJK 29/2022',
-              desc: 'Struktur laporan mengacu elemen wajib Bab IX SEOJK 29/SEOJK.03/2022 untuk membantu bank memenuhi kewajiban pelaporan OJK lebih cepat.',
+              title: 'Draft notifikasi mengacu SEOJK 29/2022',
+              desc: 'Draft notifikasi awal mengacu elemen wajib Bab IX SEOJK 29/SEOJK.03/2022. Membantu bank memenuhi kewajiban notifikasi 24 jam ke OJK setelah insiden dikonfirmasi.',
             },
             {
               icon: <WebhookIcon />,

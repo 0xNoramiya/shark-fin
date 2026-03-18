@@ -20,7 +20,7 @@ SHARK-Fin adalah platform intelijen ancaman siber yang secara otomatis:
 1. **Mengumpulkan** data dari sumber publik (Telegram, Pastebin, GitHub, HIBP)
 2. **Mengklasifikasi** konten menggunakan regex pattern khusus Indonesia (kartu kredit dengan validasi Luhn, NIK dengan validasi tanggal, NPWP dengan checksum)
 3. **Menilai risiko** dengan scoring engine multi-faktor (0-100)
-4. **Melaporkan** temuan dalam format regulasi OJK kepada lembaga terkait
+4. **Menyiapkan draft** notifikasi awal mengacu SEOJK 29/SEOJK.03/2022 Bab IX untuk membantu bank memenuhi kewajiban notifikasi 24 jam ke OJK
 
 ## Arsitektur
 
@@ -65,8 +65,8 @@ SHARK-Fin adalah platform intelijen ancaman siber yang secara otomatis:
                |
                v
     +---------------------+
-    | LAPORAN OJK/BSSN    |
-    | (Auto-generated)    |
+    | Draft Notifikasi OJK|
+    | (SEOJK 29/2022 IX)  |
     +---------------------+
 ```
 
@@ -99,7 +99,8 @@ Akses:
 - **Risk Scoring Engine** — Skor 0-100 dengan multiplier volume, freshness, dan kredibilitas sumber
 - **Dashboard Analis** — Interface Bahasa Indonesia dengan filter severity/sumber/status, detail ancaman, dan entity breakdown
 - **Landing Page** — Public-facing page dengan ocean theme untuk presentasi ke stakeholder
-- **Laporan OJK Otomatis** — Generate laporan insiden format regulasi dengan rekomendasi tindakan per jenis data
+- **Draft Notifikasi OJK** — Generate draft notifikasi awal mengacu SEOJK 29/SEOJK.03/2022 Bab IX, membantu bank memenuhi kewajiban notifikasi 24 jam ke OJK
+- **Laporan Intelijen Internal** — Generate laporan teknis lengkap (entitas, confidence, raw preview, risk factors) untuk tim keamanan bank
 - **Status Workflow** — Alur kerja analis: Baru → Terverifikasi → Dimitigasi / Positif Palsu
 - **Export Insiden** — Download laporan per ancaman sebagai file .txt
 - **Deduplication** — SHA-256 hash untuk mencegah duplikasi data
@@ -112,7 +113,7 @@ Akses:
 | Deteksi ancaman siber | Real-time monitoring 4 sumber OSINT |
 | Perlindungan data keuangan | Pattern detection khusus instrumen keuangan Indonesia |
 | Early warning system | Auto-classification + risk scoring + alerting |
-| Regulatory compliance | Auto-generated laporan format OJK |
+| Regulatory compliance | Draft notifikasi awal mengacu SEOJK 29/2022 Bab IX |
 | Kolaborasi stakeholder | API untuk integrasi dengan sistem BI, OJK, BSSN |
 
 ## Tech Stack
@@ -135,7 +136,8 @@ Akses:
 | GET | `/api/v1/threats` | Feed ancaman (filter, paginasi) |
 | GET | `/api/v1/threats/{id}` | Detail ancaman |
 | PATCH | `/api/v1/threats/{id}/status` | Update status (workflow analis) |
-| GET | `/api/v1/threats/{id}/report` | Laporan insiden format OJK |
+| GET | `/api/v1/threats/{id}/report?format=ojk` | Draft notifikasi awal SEOJK 29/2022 |
+| GET | `/api/v1/threats/{id}/report?format=intel` | Laporan intelijen internal |
 | GET | `/api/v1/stats/summary` | Statistik dashboard |
 | POST | `/api/v1/alerts/webhook` | Registrasi webhook alert |
 | GET | `/health` | Health check |
