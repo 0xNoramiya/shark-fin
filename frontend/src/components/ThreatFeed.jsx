@@ -41,24 +41,24 @@ export default function ThreatFeed({ onSelect }) {
       <div className="p-4 space-y-3" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <h2 className="font-medium text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)', letterSpacing: '0.08em' }}>Feed Ancaman</h2>
-            <span className="flex items-center gap-1.5 text-[10px]" style={{ color: '#ef4444' }}>
-              <span className="relative flex h-1.5 w-1.5"><span className="pulse-dot absolute inline-flex h-full w-full rounded-full" style={{ backgroundColor: '#ef4444' }} /><span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: '#ef4444' }} /></span>LIVE
+            <h2 className="font-medium uppercase tracking-widest" style={{ fontSize: '13px', color: 'var(--text-muted)', letterSpacing: '0.08em' }}>Feed Ancaman</h2>
+            <span className="flex items-center gap-1.5" style={{ fontSize: '11px', color: '#ef4444' }}>
+              <span className="relative flex h-2 w-2"><span className="pulse-dot absolute inline-flex h-full w-full rounded-full" style={{ backgroundColor: '#ef4444' }} /><span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: '#ef4444' }} /></span>LIVE
             </span>
           </div>
           <span className="text-[10px]" style={{ color: 'var(--text-faint)' }}>{data?.total || 0} total · Diperbarui setiap 30 detik</span>
         </div>
         <div className="flex flex-wrap gap-2">
           <input type="text" placeholder="Cari..." value={search} onChange={e => setSearch(e.target.value)}
-            className="px-3 py-1.5 rounded-lg text-sm w-36"
-            style={{ backgroundColor: 'var(--bg-input)', border: '1px solid var(--border-input)', color: 'var(--text-secondary)', outline: 'none' }} />
+            className="px-3 py-1.5 rounded-xl w-44"
+            style={{ fontSize: '14px', backgroundColor: 'var(--bg-input)', border: '1px solid var(--border-input)', color: 'var(--text-secondary)', outline: 'none' }} />
           {[
             { key: 'severity', opts: [['', 'Semua Severity'], ['CRITICAL', 'Kritis'], ['HIGH', 'Tinggi'], ['MEDIUM', 'Sedang'], ['LOW', 'Rendah']] },
             { key: 'source_type', opts: [['', 'Semua Sumber'], ['TELEGRAM', 'Telegram'], ['PASTE', 'Paste'], ['GITHUB', 'GitHub'], ['GOOGLE_DORK', 'Google Dork']] },
             { key: 'status', opts: [['', 'Semua Status'], ['NEW', 'Baru'], ['VERIFIED', 'Terverifikasi'], ['MITIGATED', 'Dimitigasi'], ['FALSE_POSITIVE', 'Positif Palsu']] },
           ].map(f => (
             <select key={f.key} value={filters[f.key] || ''} onChange={e => setFilters(prev => ({ ...prev, [f.key]: e.target.value || undefined }))}
-              className="px-2 py-1.5 rounded-lg text-sm"
+              className="px-2.5 py-1.5 rounded-xl text-sm"
               style={{ backgroundColor: 'var(--bg-input)', border: '1px solid var(--border-input)', color: 'var(--text-secondary)', outline: 'none' }}>
               {f.opts.map(([v, l]) => <option key={v} value={v} style={{ backgroundColor: 'var(--bg-input)' }}>{l}</option>)}
             </select>
@@ -66,7 +66,7 @@ export default function ThreatFeed({ onSelect }) {
         </div>
       </div>
 
-      <ul className="overflow-y-auto max-h-[640px]">
+      <ul className="overflow-y-auto max-h-[720px]">
         {isLoading && <li className="p-6 text-center text-sm" style={{ color: 'var(--text-faint)' }}>Memuat...</li>}
         {!isLoading && !threats.length && <li className="p-6 text-center text-sm" style={{ color: 'var(--text-faint)' }}>Tidak ada ancaman ditemukan.</li>}
         {threats.map((t, idx) => {
@@ -74,31 +74,32 @@ export default function ThreatFeed({ onSelect }) {
           const s = sev(t.severity), isHovered = hoveredId === t.id
           return (
             <li key={t.id} onClick={() => onSelect(t)} onMouseEnter={() => setHoveredId(t.id)} onMouseLeave={() => setHoveredId(null)}
-              className={`px-4 py-3 cursor-pointer transition-colors ${t._isDemo ? 'threat-enter threat-pulse-red' : ''}`}
+              className={`px-5 py-4 cursor-pointer transition-colors ${t._isDemo ? 'threat-enter threat-pulse-red' : ''}`}
               style={{ borderBottom: idx < threats.length - 1 ? '1px solid var(--border-divider)' : 'none', borderLeft: `3px solid var(${s.left})`,
                 backgroundColor: isHovered ? 'var(--bg-row-hover)' : 'transparent' }}>
               <div className="flex items-start gap-3">
-                <span className="mt-0.5 shrink-0 px-2 py-0.5 rounded-md uppercase font-medium"
-                  style={{ fontSize: '9px', letterSpacing: '0.06em', backgroundColor: `var(${s.bg})`, color: `var(${s.color})`, border: `1px solid var(${s.border})` }}>
+                <span className="mt-0.5 shrink-0 rounded-md uppercase font-medium"
+                  style={{ fontSize: '10px', padding: '4px 10px', letterSpacing: '0.06em', backgroundColor: `var(${s.bg})`, color: `var(${s.color})`, border: `1px solid var(${s.border})` }}>
                   {SEV_LABEL[t.severity]}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>{buildTitle(t)}</p>
-                  <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--text-faint)' }}>
+                  <p className="font-semibold truncate" style={{ fontSize: '15px', color: 'var(--text-primary)' }}>{buildTitle(t)}</p>
+                  <p className="mt-0.5 truncate" style={{ fontSize: '13px', color: 'var(--text-faint)' }}>
                     {truncateUrl(t.source_url)} &middot; {entityList.length} entitas &middot; {timeAgo(t.created_at)}
                   </p>
-                  <div className="flex flex-wrap items-center gap-1 mt-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5 mt-2">
                     {entityTypes.map(et => (
-                      <span key={et} className="text-[10px] px-1.5 py-0.5 rounded"
-                        style={{ backgroundColor: 'var(--tag-bg)', color: 'var(--tag-text)', border: '1px solid var(--tag-bdr)' }}>{et}</span>
+                      <span key={et} className="rounded px-2 py-0.5"
+                        style={{ fontSize: '11px', backgroundColor: 'var(--tag-bg)', color: 'var(--tag-text)', border: '1px solid var(--tag-bdr)' }}>{et}</span>
                     ))}
-                    {isHovered && <span className="text-[10px] ml-1" style={{ color: 'var(--accent)' }}>&rarr; lihat</span>}
+                    {isHovered && <span className="ml-1" style={{ fontSize: '11px', color: 'var(--accent)' }}>&rarr; lihat</span>}
                   </div>
                 </div>
                 <div className="shrink-0 mt-0.5">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center"
-                    style={{ border: `2px solid var(${s.score})`, backgroundColor: 'var(--score-bg)' }}>
-                    <span className="text-xs font-medium" style={{ color: `var(${s.score})` }}>{t.risk_score}</span>
+                  <div className="rounded-full flex items-center justify-center transition-shadow"
+                    style={{ width: '42px', height: '42px', border: `2px solid var(${s.score})`, backgroundColor: isHovered ? `var(${s.bg})` : 'var(--score-bg)',
+                      boxShadow: isHovered ? `0 0 10px var(${s.bg})` : 'none' }}>
+                    <span className="font-bold font-mono" style={{ fontSize: '14px', color: `var(${s.score})` }}>{t.risk_score}</span>
                   </div>
                 </div>
               </div>

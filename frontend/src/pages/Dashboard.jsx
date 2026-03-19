@@ -12,7 +12,7 @@ export const DemoContext = createContext({ demoThreat: null, statBoost: null })
 const DEMO_THREAT = {
   id: 'demo-' + Date.now(), source_type: 'TELEGRAM',
   source_url: 'https://t.me/indo_cc_dumps/8821',
-  raw_content: 'Fresh Mandiri fullz 5.2k | CC + NIK + CVV | exp 2026 | harga nego | format: 4539XXXXXXXX|XX/XX|XXX|nama|NIK16digit',
+  content_preview: 'Fresh Mandiri fullz 5.2k | CC + NIK + CVV | exp 2026 | harga nego | format: 4539XXXXXXXX|XX/XX|XXX|nama|NIK16digit',
   detected_entities: { entities: [
     { type: 'CREDIT_CARD', value: '4539 •••• •••• 1234', confidence: 0.95 },
     { type: 'CREDIT_CARD', value: '4539 •••• •••• 5678', confidence: 0.93 },
@@ -35,14 +35,14 @@ function WibClock() {
     }
     tick(); const id = setInterval(tick, 1000); return () => clearInterval(id)
   }, [])
-  return <span style={{ color: 'var(--accent)', fontFamily: 'monospace', fontSize: '12px' }}>{time}</span>
+  return <span className="font-mono" style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontSize: '12px' }}>{time}</span>
 }
 
 function ScanIndicator() {
   const [open, setOpen] = useState(false)
   return (
     <div className="relative">
-      <button onClick={() => setOpen(o => !o)} className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+      <button onClick={() => setOpen(o => !o)} className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-sans)' }}>
         <span className="relative flex h-2 w-2">
           <span className="pulse-green absolute inline-flex h-full w-full rounded-full" style={{ backgroundColor: 'var(--scan-dot)' }} />
           <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: 'var(--scan-dot)' }} />
@@ -52,11 +52,11 @@ function ScanIndicator() {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-8 z-50 w-56 rounded-xl p-3 space-y-2"
-            style={{ backgroundColor: 'var(--bg-header)', border: '1px solid var(--border-input)' }}>
+          <div className="absolute right-0 top-8 z-50 w-72 rounded-xl p-4 space-y-3"
+            style={{ backgroundColor: 'var(--bg-header)', border: '1px solid var(--border-input)', fontFamily: 'var(--font-sans)' }}>
             {[{ name: 'Telegram', time: '2 menit lalu' }, { name: 'Paste Site', time: '8 menit lalu' },
               { name: 'GitHub', time: '12 menit lalu' }, { name: 'Google Dork', time: '52 menit lalu' }].map(s => (
-              <div key={s.name} className="flex items-center justify-between text-xs">
+              <div key={s.name} className="flex items-center justify-between" style={{ fontSize: '14px' }}>
                 <span style={{ color: 'var(--text-secondary)' }}><span style={{ color: 'var(--scan-dot)' }}>&#10003;</span> {s.name}</span>
                 <span style={{ color: 'var(--text-faint)' }}>{s.time}</span>
               </div>
@@ -80,10 +80,10 @@ function ScanBar({ phase }) {
   const c = configs[phase] || configs.scanning
   return (
     <div className={`fixed top-0 left-0 right-0 z-[60] ${phase === 'out' ? 'scan-slide-out' : 'scan-slide-in'}`}
-      style={{ backgroundColor: c.bg, borderBottom: '1px solid var(--border-input)' }}>
+      style={{ backgroundColor: c.bg, borderBottom: '1px solid var(--border-input)', fontFamily: 'var(--font-sans)' }}>
       <div className="mx-auto max-w-[1440px] px-6 py-2.5 flex items-center gap-3">
-        {phase === 'scanning' && <span className="scan-pulse text-xs" style={{ color: c.text }}>●</span>}
-        <span className="text-xs font-medium" style={{ color: c.text }}>{c.msg}</span>
+        {phase === 'scanning' && <span className="scan-pulse" style={{ color: c.text, fontSize: '14px' }}>●</span>}
+        <span className="font-medium" style={{ color: c.text, fontSize: '14px' }}>{c.msg}</span>
       </div>
     </div>
   )
@@ -92,9 +92,9 @@ function ScanBar({ phase }) {
 function Toast({ show, fading, onDetail }) {
   if (!show) return null
   return (
-    <div className={`fixed top-16 right-6 z-[60] max-w-sm w-full ${fading ? 'toast-out' : 'toast-in'}`}
-      style={{ backgroundColor: 'var(--toast-bg)', border: '1px solid var(--toast-bdr)', borderLeft: '3px solid #ef4444', borderRadius: '10px', boxShadow: 'var(--toast-shadow)' }}>
-      <div className="p-4 space-y-1.5">
+    <div className={`fixed top-16 right-6 z-[60] max-w-md w-full ${fading ? 'toast-out' : 'toast-in'}`}
+      style={{ backgroundColor: 'var(--toast-bg)', border: '1px solid var(--toast-bdr)', borderLeft: '4px solid #ef4444', borderRadius: '10px', boxShadow: 'var(--toast-shadow)', fontFamily: 'var(--font-sans)' }}>
+      <div className="p-5 space-y-2">
         <div className="flex items-center gap-2">
           <span style={{ color: '#ef4444' }}>&#x1F534;</span>
           <span className="text-xs font-medium" style={{ color: 'var(--sev-kritis-text)' }}>ANCAMAN BARU TERDETEKSI</span>
@@ -136,23 +136,23 @@ export default function Dashboard({ theme, toggleTheme }) {
 
   return (
     <DemoContext.Provider value={{ demoThreat, statBoost }}>
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-page)', color: 'var(--text-primary)' }}>
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-page)', color: 'var(--text-primary)', fontFamily: 'var(--font-sans)' }}>
         <ScanBar phase={scanPhase} />
         <Toast show={showToast} fading={toastFading} onDetail={() => { setShowToast(false); setSelected(demoThreat || DEMO_THREAT) }} />
 
         <nav className="sticky top-0 z-40 backdrop-blur" style={{ backgroundColor: 'var(--bg-header)', borderBottom: '1px solid var(--border-card)' }}>
-          <div className="mx-auto max-w-[1440px] px-6 py-3 flex items-center gap-3">
-            <button onClick={() => navigate('/')} className="h-8 w-8 rounded-lg flex items-center justify-center shrink-0"
+          <div className="mx-auto max-w-[1440px] px-6 py-4 flex items-center gap-3">
+            <button onClick={() => navigate('/')} className="h-9 w-9 rounded-lg flex items-center justify-center shrink-0"
               style={{ backgroundColor: 'var(--accent-bg)' }}>
-              <svg width="20" height="20" viewBox="0 0 36 36" fill="none"><path d="M18 4 L30 28 Q24 26 18 28 Q12 26 6 28 Z" fill="var(--accent)" opacity="0.9" /></svg>
+              <svg width="24" height="24" viewBox="0 0 36 36" fill="none"><path d="M18 4 L30 28 Q24 26 18 28 Q12 26 6 28 Z" fill="var(--accent)" opacity="0.9" /></svg>
             </button>
-            <span className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>SHARK-Fin</span>
-            <span className="hidden md:inline text-xs" style={{ color: 'var(--text-muted)' }}>Intelijen Ancaman Siber Keuangan</span>
+            <span className="font-semibold" style={{ color: 'var(--text-primary)', fontSize: '16px', fontFamily: 'var(--font-sans)' }}>SHARK-Fin</span>
+            <span className="hidden md:inline text-xs" style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-sans)' }}>Intelijen Ancaman Siber Keuangan</span>
             <div className="ml-auto flex items-center gap-4">
               <ScanIndicator />
               <ThemeToggle theme={theme} onToggle={toggleTheme} />
-              <button onClick={() => navigate('/')} className="text-xs hidden sm:inline" style={{ color: 'var(--text-secondary)' }}>&larr; Beranda</button>
-              <div className="text-xs flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+              <button onClick={() => navigate('/')} className="text-xs hidden sm:inline" style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-sans)' }}>&larr; Beranda</button>
+              <div className="text-xs flex items-center gap-2" style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-sans)' }}>
                 <span className="hidden sm:inline">WIB</span><WibClock />
               </div>
             </div>
@@ -170,9 +170,13 @@ export default function Dashboard({ theme, toggleTheme }) {
           {[1, 2, 3].map(i => <div key={i} style={{ height: '0.5px', backgroundColor: i === 1 ? 'var(--ocean-line-1)' : 'var(--ocean-line-2)', marginBottom: '6px', marginLeft: '10%', marginRight: '10%' }} />)}
         </div>
 
-        <button onClick={runDemo} disabled={demoRunning} className="fixed bottom-6 right-6 z-50 px-5 py-2.5 rounded-xl font-medium text-sm"
-          style={{ backgroundColor: demoRunning ? 'var(--logo-fin)' : 'var(--accent)', color: 'var(--bg-page)', opacity: demoRunning ? 0.6 : 1 }}>
-          {demoRunning ? '● Memindai...' : '\u25B6 Simulasi Deteksi'}
+        <button onClick={runDemo} disabled={demoRunning} className="fixed bottom-6 right-6 z-50 px-6 py-3 rounded-2xl font-medium text-sm flex items-center gap-2"
+          style={{ backgroundColor: demoRunning ? 'var(--logo-fin)' : 'var(--accent)', color: 'var(--bg-page)', opacity: demoRunning ? 0.6 : 1, fontFamily: 'var(--font-sans)', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+          {demoRunning ? (
+            <><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4" /></svg> Memindai...</>
+          ) : (
+            <><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3 L13 8 L5 13 Z" /></svg> Simulasi Deteksi</>
+          )}
         </button>
 
         {selected && <ThreatDetail threat={selected} onClose={() => setSelected(null)} />}
